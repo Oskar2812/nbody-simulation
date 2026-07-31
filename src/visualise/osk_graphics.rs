@@ -34,6 +34,7 @@ pub struct Window {
     pub is_open: bool
 }
 
+#[derive(Debug, Clone, Copy)]
 pub struct Colour {
     pub r: f32,
     pub g: f32,
@@ -153,4 +154,5 @@ impl Colour {
     pub const BLUE: Colour = Colour { r: 0.0, g: 0.0, b: 1.0, a: 1.0 };
     pub const BLACK: Colour = Colour { r: 0.0, g: 0.0, b: 0.0, a: 1.0 };
     pub const WHITE: Colour = Colour { r: 1.0, g: 1.0, b: 1.0, a: 1.0 };
+    pub const YELLOW: Colour = Colour { r: 1.0, g: 1.0, b: 0.0, a: 1.0 };
 }

@@ -1,4 +1,4 @@
-mod osk_graphics;
+pub mod osk_graphics;
 use osk_graphics::{Window, Point};
 
 use crate::simulation;
@@ -45,7 +45,7 @@ impl Visualiser {
                     first_pos = Some(pos);
                 }
 
-                self.window.draw_circle(convert_sim_to_window_coords(self, body.pos), 10.0, 15, osk_graphics::Colour::RED);
+                self.window.draw_circle(convert_sim_to_window_coords(self, body.pos), (body.radius * (self.window.height as f64 / self.sim.height)) as f32 , 15, body.colour);
             }
 
             self.window.end_frame();

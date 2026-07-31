@@ -2,6 +2,8 @@ use crate::vector;
 use vector::Vec2;
 use std::collections::VecDeque;
 
+use crate::visualise::osk_graphics::Colour;
+
 const G: f64 = 4.0 * std::f64::consts::PI * std::f64::consts::PI;
 
 #[derive(Debug)]
@@ -16,6 +18,8 @@ pub struct Body {
     pub pos: Vec2, // convention will be to give legnth in AU
     pub vel: Vec2,
     pub trail: Trail,
+    pub colour: Colour,
+    pub radius: f64
 }
 
 pub struct Simulation {
@@ -43,8 +47,8 @@ impl Trail {
 }
 
 impl Body {
-    pub fn new(mass: f64, pos: Vec2, vel: Vec2) -> Body {
-        Body { mass, pos, vel, trail: Trail::new(1000) }
+    pub fn new(mass: f64, pos: Vec2, vel: Vec2, colour: Colour, radius: f64) -> Body {
+        Body { mass, pos, vel, trail: Trail::new(1000), colour, radius }
     }
 
     pub fn update(&mut self, force: Vec2, dt: f64) {
