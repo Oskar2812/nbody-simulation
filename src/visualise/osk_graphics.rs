@@ -29,6 +29,9 @@ unsafe extern "C" {
 
 pub struct Window {
     handle: *mut OskWindow,
+    pub width: u32,
+    pub height: u32,
+    pub is_open: bool
 }
 
 pub struct Colour {
@@ -53,9 +56,19 @@ impl Window {
             None
         } else {
             Some(Window { 
-                handle: ptr
+                handle: ptr,
+                width,
+                height,
+                is_open: true
             })
         }
+    }
+
+    pub fn poll_events(&mut self) -> bool {
+        let success = unsafe { PollEvents() != 0};
+
+        self.is_open = success;
+        success
     }
 
     pub fn begin_frame(&self) -> bool {
@@ -132,10 +145,6 @@ impl Window {
             DrawLine(self.handle, start.x, start.y, end.x, end.y, thickness, osk_colour) != -1
         }
     }
-}
-
-pub fn poll_events() -> bool {
-    unsafe { PollEvents() != 0}
 }
 
 impl Colour {
