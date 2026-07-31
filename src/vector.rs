@@ -23,6 +23,10 @@ impl Vec2 {
 
     pub fn normalised(&self) -> Vec2 {
         let len: f64 = self.magnitude();
+        if len < 1e-9 {
+            return *self
+        }
+
         Vec2 { x: self.x / len, y: self.y / len}
     }
 
