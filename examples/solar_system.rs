@@ -1,14 +1,4 @@
-mod vector;
-use vector::Vec2;
-
-mod simulation;
-use simulation::{Body, Simulation};
-
-mod visualise;
-use visualise::Visualiser;
-
-use crate::visualise::osk_graphics::Colour;
-
+use nbody_simulation::{Simulation, Body, Colour, Vec2, Visualiser};
 
 fn main() {
     let length: f64 = 20.0;
