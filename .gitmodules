@@ -1,0 +1,3 @@
+[submodule "vendor/OskGraphics"]
+	path = vendor/OskGraphics
+	url = https://github.com/Oskar2812/OskGraphics.git
