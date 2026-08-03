@@ -26,7 +26,7 @@ fn main() {
     sim.add_body(uranus);
     sim.add_body(neptune);
 
-    let mut vis: Visualiser = Visualiser::new(sim, 600, 600).expect("Failed to open window");
+    let vis: Visualiser = Visualiser::new(sim, 600, 600).expect("Failed to open window");
 
     vis.run(10000000);
 }

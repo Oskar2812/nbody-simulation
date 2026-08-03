@@ -33,7 +33,7 @@ fn main() {
     sim.add_body(orbiter_a);
     sim.add_body(orbiter_b);
 
-    let mut vis: Visualiser = Visualiser::new(sim, 600, 600).expect("Failed to open window");
+    let vis: Visualiser = Visualiser::new(sim, 600, 600).expect("Failed to open window");
 
     vis.run(200000);
 }

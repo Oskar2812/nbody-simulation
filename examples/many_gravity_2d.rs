@@ -2,7 +2,7 @@ use nbody_simulation::{Body, Colour, Simulation, Vec2, Visualiser, simulation::P
 
 use std::f64::consts::PI;
 
-const NUM_BODIES: usize = 1600;   // crank this up to stress-test compute_forces
+const NUM_BODIES: usize = 6400;   // crank this up to stress-test compute_forces
 
 fn main() {
     let length: f64 = 40.0;
@@ -39,7 +39,7 @@ fn main() {
 
     sim.zero_total_momentum();
 
-    let mut vis: Visualiser = Visualiser::new(sim, 800, 800).expect("Failed to open window");
+    let vis: Visualiser = Visualiser::new(sim, 800, 800).expect("Failed to open window");
 
     vis.run(200000);
 }
