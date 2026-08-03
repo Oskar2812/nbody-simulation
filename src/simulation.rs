@@ -1,8 +1,6 @@
-use crate::{simulation::Potential::{Gravity2d, Gravity3d}, vector};
-use vector::Vec2;
-use std::collections::VecDeque;
-
+use crate::math::Vec2;
 use crate::visualise::osk_graphics::Colour;
+use std::collections::VecDeque;
 
 const G: f64 = 4.0 * std::f64::consts::PI * std::f64::consts::PI;
 
@@ -77,10 +75,10 @@ impl Simulation {
 
     pub fn update(&mut self) {
         match self.potential {
-            Gravity3d => {
+            Potential::Gravity3d => {
                 self.update_gravity_3d();
             }
-            Gravity2d => {
+            Potential::Gravity2d => {
                 self.update_gravity_2d();
             }
         }
@@ -151,7 +149,7 @@ impl Simulation {
 
         // apply the correction to ONE body (conventionally the most massive/central one)
         if let Some(heaviest) = self.bodies.iter_mut().max_by(|a, b| a.mass.partial_cmp(&b.mass).unwrap()) {
-            heaviest.vel = heaviest.vel + correction;
+            heaviest.vel += correction;
         }
     }
 }

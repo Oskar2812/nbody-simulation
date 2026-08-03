@@ -4,7 +4,7 @@ use osk_graphics::{Window, Point};
 use crate::simulation;
 use simulation::Simulation;
 
-use crate::vector::Vec2;
+use crate::math::Vec2;
 
 pub struct Visualiser {
     window: Window,
