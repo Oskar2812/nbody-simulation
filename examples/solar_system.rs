@@ -1,4 +1,4 @@
-use nbody_simulation::{Simulation, Body, Colour, Vec2, Visualiser};
+use nbody_simulation::{Body, Colour, Simulation, Vec2, Visualiser, simulation::Potential};
 
 fn main() {
     let length: f64 = 20.0;
@@ -15,7 +15,7 @@ fn main() {
     let uranus  = Body::new(4.37e-5, center + Vec2::new(5.4, 0.0), Vec2::new(0.0, 2.70), Colour::BLUE,   0.15);
     let neptune = Body::new(5.15e-5, center + Vec2::new(6.2, 0.0), Vec2::new(0.0, 2.52), Colour::BLUE,   0.15);
 
-    let mut sim: Simulation = Simulation::new(height, length, 0.001);
+    let mut sim: Simulation = Simulation::new(height, length, 0.001, Potential::Gravity3d);
     sim.add_body(sun);
     sim.add_body(mercury);
     sim.add_body(venus);

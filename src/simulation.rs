@@ -1,4 +1,4 @@
-use crate::vector;
+use crate::{simulation::Potential::Gravity3d, vector};
 use vector::Vec2;
 use std::collections::VecDeque;
 
@@ -22,11 +22,16 @@ pub struct Body {
     pub radius: f64
 }
 
+pub enum Potential {
+    Gravity3d
+}
+
 pub struct Simulation {
     pub bodies: Vec<Body>,
     dt: f64, // in years
     pub height: f64,
-    pub length: f64
+    pub length: f64,
+    pub potential: Potential,
 }
 
 impl Trail {
@@ -61,8 +66,8 @@ impl Body {
 }
 
 impl Simulation {
-    pub fn new(height: f64, length: f64, dt: f64) -> Simulation {
-        Simulation { bodies: Vec::new(), dt, height, length }
+    pub fn new(height: f64, length: f64, dt: f64, potential: Potential) -> Simulation {
+        Simulation { bodies: Vec::new(), dt, height, length, potential }
     }
 
     pub fn add_body(&mut self, body: Body) {
@@ -70,6 +75,14 @@ impl Simulation {
     }
 
     pub fn update(&mut self) {
+        match self.potential {
+            Gravity3d => {
+                self.update_gravity_3d();
+            }
+        }
+    }
+
+    fn update_gravity_3d(&mut self) {
         let forces: Vec<Vec2> = self.bodies.iter()
             .map(|body|self.compute_force(body))
             .collect();
