@@ -8,3 +8,17 @@ N =   400  |  total:    9.91s  |  per step:     1.98ms
 N =   800  |  total:   39.51s  |  per step:     7.90ms
 N =  1600  |  total:  160.84s  |  per step:    32.17ms
 N =  3200  |  total:  648.29s  |  per step:   129.66ms
+
+
+Barnes-Hut O(NlogN)
+
+N =    10  |  total:  13.88ms  |  per step:     2.78µs
+N =    50  |  total: 283.50ms  |  per step:    56.70µs
+N =   100  |  total: 520.90ms  |  per step:   104.18µs
+N =   200  |  total:    1.14s  |  per step:   227.68µs
+N =   400  |  total:    2.42s  |  per step:   483.33µs
+N =   800  |  total:    4.60s  |  per step:   919.37µs
+N =  1600  |  total:    8.97s  |  per step:     1.79ms
+N =  3200  |  total:   16.23s  |  per step:     3.25ms
+N =  6400  |  total:   32.26s  |  per step:     6.45ms
+N = 12800  |  total:   64.46s  |  per step:    12.89ms

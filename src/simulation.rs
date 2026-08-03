@@ -1,5 +1,8 @@
+mod gravity_2d;
+
 use crate::math::Vec2;
 use crate::visualise::osk_graphics::Colour;
+
 use std::collections::VecDeque;
 
 const G: f64 = 4.0 * std::f64::consts::PI * std::f64::consts::PI;
@@ -27,7 +30,7 @@ pub enum Potential {
 
 pub struct Simulation {
     pub bodies: Vec<Body>,
-    dt: f64, // in years
+    pub dt: f64, // in years
     pub height: f64,
     pub length: f64,
     pub potential: Potential,
@@ -94,15 +97,7 @@ impl Simulation {
         }
     }
 
-    fn update_gravity_2d(&mut self) {
-        let forces: Vec<Vec2> = self.bodies.iter()
-            .map(|body|self.compute_force_gravity_2d(body))
-            .collect();
-
-        for (body, force) in self.bodies.iter_mut().zip(forces.iter()) {
-            body.update(*force, self.dt);
-        }
-    }
+    
 
     fn compute_force_gravity_3d(&self, body: &Body) -> Vec2 {
 
@@ -117,22 +112,6 @@ impl Simulation {
             let norm: Vec2 = dir.normalised();
 
             force += (G * body.mass * other_body.mass / mag) * norm; 
-        }
-
-        force
-    }
-
-    fn compute_force_gravity_2d(&self, body: &Body) -> Vec2 {
-
-        let mut force: Vec2 = Vec2::new(0.0, 0.0);
-        for other_body in self.bodies.iter() {
-            let dir: Vec2 = other_body.pos - body.pos;
-            let mag: f64 = dir.magnitude_squared();
-            if mag < 1e-9 {
-                continue;
-            }
-
-            force += (body.mass * other_body.mass / mag) * dir; 
         }
 
         force
