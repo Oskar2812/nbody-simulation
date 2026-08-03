@@ -1,4 +1,4 @@
-use crate::{simulation::Potential::Gravity3d, vector};
+use crate::{simulation::Potential::{Gravity2d, Gravity3d}, vector};
 use vector::Vec2;
 use std::collections::VecDeque;
 
@@ -23,7 +23,8 @@ pub struct Body {
 }
 
 pub enum Potential {
-    Gravity3d
+    Gravity3d,
+    Gravity2d,
 }
 
 pub struct Simulation {
@@ -52,8 +53,8 @@ impl Trail {
 }
 
 impl Body {
-    pub fn new(mass: f64, pos: Vec2, vel: Vec2, colour: Colour, radius: f64) -> Body {
-        Body { mass, pos, vel, trail: Trail::new(1000), colour, radius }
+    pub fn new(mass: f64, pos: Vec2, vel: Vec2, colour: Colour, radius: f64, trail_length: usize) -> Body {
+        Body { mass, pos, vel, trail: Trail::new(trail_length), colour, radius }
     }
 
     pub fn update(&mut self, force: Vec2, dt: f64) {
@@ -79,12 +80,15 @@ impl Simulation {
             Gravity3d => {
                 self.update_gravity_3d();
             }
+            Gravity2d => {
+                self.update_gravity_2d();
+            }
         }
     }
 
     fn update_gravity_3d(&mut self) {
         let forces: Vec<Vec2> = self.bodies.iter()
-            .map(|body|self.compute_force(body))
+            .map(|body|self.compute_force_gravity_3d(body))
             .collect();
 
         for (body, force) in self.bodies.iter_mut().zip(forces.iter()) {
@@ -92,7 +96,17 @@ impl Simulation {
         }
     }
 
-    fn compute_force(&self, body: &Body) -> Vec2 {
+    fn update_gravity_2d(&mut self) {
+        let forces: Vec<Vec2> = self.bodies.iter()
+            .map(|body|self.compute_force_gravity_2d(body))
+            .collect();
+
+        for (body, force) in self.bodies.iter_mut().zip(forces.iter()) {
+            body.update(*force, self.dt);
+        }
+    }
+
+    fn compute_force_gravity_3d(&self, body: &Body) -> Vec2 {
 
         let mut force: Vec2 = Vec2::new(0.0, 0.0);
         for other_body in self.bodies.iter() {
@@ -108,6 +122,37 @@ impl Simulation {
         }
 
         force
+    }
+
+    fn compute_force_gravity_2d(&self, body: &Body) -> Vec2 {
+
+        let mut force: Vec2 = Vec2::new(0.0, 0.0);
+        for other_body in self.bodies.iter() {
+            let dir: Vec2 = other_body.pos - body.pos;
+            let mag: f64 = dir.magnitude_squared();
+            if mag < 1e-9 {
+                continue;
+            }
+
+            force += (body.mass * other_body.mass / mag) * dir; 
+        }
+
+        force
+    }
+
+    pub fn zero_total_momentum(&mut self) {
+        let total_momentum: Vec2 = self.bodies.iter()
+            .map(|b| b.vel * b.mass)
+            .fold(Vec2::new(0.0, 0.0), |acc, p| acc + p);
+
+        let total_mass: f64 = self.bodies.iter().map(|b| b.mass).sum();
+
+        let correction = total_momentum * (-1.0 / total_mass);
+
+        // apply the correction to ONE body (conventionally the most massive/central one)
+        if let Some(heaviest) = self.bodies.iter_mut().max_by(|a, b| a.mass.partial_cmp(&b.mass).unwrap()) {
+            heaviest.vel = heaviest.vel + correction;
+        }
     }
 }
 

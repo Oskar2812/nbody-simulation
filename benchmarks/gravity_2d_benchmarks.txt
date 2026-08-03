@@ -1,0 +1,10 @@
+Naive implementation 0(N^2)
+
+N =    10  |  total:  11.12ms  |  per step:     2.22µs
+N =    50  |  total: 189.92ms  |  per step:    37.98µs
+N =   100  |  total: 628.82ms  |  per step:   125.76µs
+N =   200  |  total:    2.46s  |  per step:   492.77µs
+N =   400  |  total:    9.91s  |  per step:     1.98ms
+N =   800  |  total:   39.51s  |  per step:     7.90ms
+N =  1600  |  total:  160.84s  |  per step:    32.17ms
+N =  3200  |  total:  648.29s  |  per step:   129.66ms
