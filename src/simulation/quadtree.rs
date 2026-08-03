@@ -1,62 +1,20 @@
-use crate::simulation::{Simulation, Body};
+use crate::simulation::Body;
 use crate::math::Vec2;
 
 const MAX_DEPTH: usize = 10;
 const MAX_BODIES_PER_LEAF: usize = 10;
-const THETA: f64 = 0.5;
+pub(crate) const THETA: f64 = 0.5;
 
 pub(crate) struct QuadNode {
-    half_length: f64,
-    children: Option<Box<[QuadNode; 4]>>,
-    body_indexes: Vec<usize>, 
-    center_of_mass: Option<Vec2>,
-    total_mass: Option<f64>,
-}
-
-fn enforce_boundaries(body: &mut Body, length: f64, height: f64) {
-        if body.pos.x < 0.0 {
-            body.pos.x = 0.0;
-        }
-        else if body.pos.x > length {
-            body.pos.x = length;
-        }
-
-        if body.pos.y < 0.0 {
-            body.pos.y = 0.0;
-        }
-        else if body.pos.y > height {
-            body.pos.y = height;
-        }
-    }
-
-impl Simulation {
-    pub(crate) fn update_gravity_2d(&mut self) {
-        let mut quad_tree: QuadNode = QuadNode::build_tree(
-            &self.bodies,
-            (0..self.bodies.len()).collect(),
-            Vec2::new(self.length / 2.0, self.height / 2.0),
-            self.length / 2.0,
-            0);
-
-            quad_tree.build_mass_distribution(&self.bodies);
-
-        let forces: Vec<Vec2> = self.bodies.iter()
-            .map(|body|self.compute_force_gravity_2d(body, &quad_tree))
-            .collect();
-
-        for (body, force) in self.bodies.iter_mut().zip(forces.iter()) {
-            body.update(*force, self.dt);
-            enforce_boundaries(body, self.length, self.height);
-        }
-    }
-
-    fn compute_force_gravity_2d(&self, body: &Body, quad_tree: &QuadNode) -> Vec2 {
-        compute_force_from_node(quad_tree, &self.bodies, body)
-    }
+    pub(crate) half_length: f64,
+    pub(crate) children: Option<Box<[QuadNode; 4]>>,
+    pub(crate) body_indexes: Vec<usize>, 
+    pub(crate) center_of_mass: Option<Vec2>,
+    pub(crate) total_mass: Option<f64>,
 }
 
 impl QuadNode {
-    fn is_leaf(&self) -> bool {
+    pub(crate) fn is_leaf(&self) -> bool {
         self.children.is_none()
     }
 
@@ -68,7 +26,7 @@ impl QuadNode {
         QuadNode { half_length, children: Some(Box::new(children)), body_indexes: Vec::new(), center_of_mass: None, total_mass: None }
     }
 
-    fn build_tree(bodies: &[Body], body_indexes: Vec<usize>, center: Vec2, half_length: f64, depth: usize) -> QuadNode {
+    pub(crate) fn build_tree(bodies: &[Body], body_indexes: Vec<usize>, center: Vec2, half_length: f64, depth: usize) -> QuadNode {
         if body_indexes.len() <= MAX_BODIES_PER_LEAF || depth >= MAX_DEPTH {
             return QuadNode::new_leaf(half_length, body_indexes);
         }
@@ -92,7 +50,7 @@ impl QuadNode {
         QuadNode::new_branch(half_length, children)
     }
 
-    fn build_mass_distribution(&mut self, bodies: &[Body]) {
+    pub(crate) fn build_mass_distribution(&mut self, bodies: &[Body]) {
         let mut mass: f64 = 0.0;
         let mut com: Vec2 = Vec2::new(0.0, 0.0);
         
@@ -143,7 +101,7 @@ fn quadrant(center: Vec2, body_pos: Vec2) -> u8 {
     }
 }
 
-fn compute_force_from_node(node: &QuadNode, bodies: &[Body], target: &Body) -> Vec2 {
+pub(crate) fn compute_force_from_node(node: &QuadNode, bodies: &[Body], target: &Body) -> Vec2 {
     let mut force = Vec2::new(0.0, 0.0);
 
     if node.is_leaf() {

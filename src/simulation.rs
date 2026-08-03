@@ -1,11 +1,12 @@
-mod gravity_2d;
+mod gravity;
+mod quadtree;
 
 use crate::math::Vec2;
 use crate::visualise::osk_graphics::Colour;
 
 use std::collections::VecDeque;
 
-const G: f64 = 4.0 * std::f64::consts::PI * std::f64::consts::PI;
+pub const G: f64 = 4.0 * std::f64::consts::PI * std::f64::consts::PI;
 
 #[derive(Debug)]
 pub struct Trail {
@@ -78,43 +79,10 @@ impl Simulation {
 
     pub fn update(&mut self) {
         match self.potential {
-            Potential::Gravity3d => {
-                self.update_gravity_3d();
-            }
-            Potential::Gravity2d => {
-                self.update_gravity_2d();
+            Potential::Gravity3d | Potential::Gravity2d => {
+                self.update_gravity();
             }
         }
-    }
-
-    fn update_gravity_3d(&mut self) {
-        let forces: Vec<Vec2> = self.bodies.iter()
-            .map(|body|self.compute_force_gravity_3d(body))
-            .collect();
-
-        for (body, force) in self.bodies.iter_mut().zip(forces.iter()) {
-            body.update(*force, self.dt);
-        }
-    }
-
-    
-
-    fn compute_force_gravity_3d(&self, body: &Body) -> Vec2 {
-
-        let mut force: Vec2 = Vec2::new(0.0, 0.0);
-        for other_body in self.bodies.iter() {
-            let dir: Vec2 = other_body.pos - body.pos;
-            let mag: f64 = dir.magnitude_squared();
-            if mag < 1e-9 {
-                continue;
-            }
-
-            let norm: Vec2 = dir.normalised();
-
-            force += (G * body.mass * other_body.mass / mag) * norm; 
-        }
-
-        force
     }
 
     pub fn zero_total_momentum(&mut self) {
@@ -130,6 +98,22 @@ impl Simulation {
         if let Some(heaviest) = self.bodies.iter_mut().max_by(|a, b| a.mass.partial_cmp(&b.mass).unwrap()) {
             heaviest.vel += correction;
         }
+    }
+}
+
+pub fn enforce_boundaries(body: &mut Body, length: f64, height: f64) {
+    if body.pos.x < 0.0 {
+        body.pos.x = 0.0;
+    }
+    else if body.pos.x > length {
+        body.pos.x = length;
+    }
+
+    if body.pos.y < 0.0 {
+        body.pos.y = 0.0;
+    }
+    else if body.pos.y > height {
+        body.pos.y = height;
     }
 }
 
