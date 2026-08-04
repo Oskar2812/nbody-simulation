@@ -8,6 +8,8 @@ use crate::math::Vec2;
 
 use std::sync::mpsc;
 use std::thread;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 
 struct FrameData {
     bodies: Vec<BodyDrawInfo>,
@@ -46,9 +48,14 @@ impl Visualiser {
         let sim_height = sim.height;
         let sim_length = sim.length;
 
+        let stop_flag: Arc<AtomicBool> = Arc::new(AtomicBool::new(false));
 
+        let stop_flag_clone: Arc<AtomicBool> = Arc::clone(&stop_flag);
         let sim_handle = thread::spawn(move || {
             for _ in 0..timesteps {
+                if stop_flag_clone.load(Ordering::Relaxed) {
+                    return sim;
+                }
                 sim.update();
 
                 let frame = FrameData {
@@ -65,7 +72,7 @@ impl Visualiser {
                 }
             }
 
-            sim   // hand ownership of `sim` back through the JoinHandle
+            sim
         });
 
         while self.window.poll_events() && timestep < timesteps {
@@ -101,6 +108,8 @@ impl Visualiser {
 
             timestep += 1;
         }
+
+        stop_flag.store(true, Ordering::Relaxed);
 
         let sim = sim_handle.join().unwrap();   // reclaim ownership once the sim thread finishes
         self.sim = Some(sim);
