@@ -10,15 +10,30 @@ N =  1600  |  total:  160.84s  |  per step:    32.17ms
 N =  3200  |  total:  648.29s  |  per step:   129.66ms
 
 
-Barnes-Hut O(NlogN)
+Barnes Hut O(NlogN) --release 
+N =    10  |  total:   2.56ms  |  per step:   511.00ns
+N =    50  |  total:  94.45ms  |  per step:    18.89µs
+N =   100  |  total: 255.79ms  |  per step:    51.16µs
+N =   200  |  total: 752.92ms  |  per step:   150.58µs
+N =   400  |  total:    2.43s  |  per step:   485.75µs
+N =   800  |  total:    7.67s  |  per step:     1.53ms
+N =  1600  |  total:   21.01s  |  per step:     4.20ms
+N =  3200  |  total:   53.22s  |  per step:    10.64ms
+N =  6400  |  total:  128.52s  |  per step:    25.70ms
+N = 12800  |  total:  313.87s  |  per step:    62.77ms
+N = 25600  |  total:  755.68s  |  per step:   151.14ms
+N = 51200  |  total: 2036.17s  |  per step:   407.23ms
 
-N =    10  |  total:  13.88ms  |  per step:     2.78µs
-N =    50  |  total: 283.50ms  |  per step:    56.70µs
-N =   100  |  total: 520.90ms  |  per step:   104.18µs
-N =   200  |  total:    1.14s  |  per step:   227.68µs
-N =   400  |  total:    2.42s  |  per step:   483.33µs
-N =   800  |  total:    4.60s  |  per step:   919.37µs
-N =  1600  |  total:    8.97s  |  per step:     1.79ms
-N =  3200  |  total:   16.23s  |  per step:     3.25ms
-N =  6400  |  total:   32.26s  |  per step:     6.45ms
-N = 12800  |  total:   64.46s  |  per step:    12.89ms
+Barnes Hut O(NlogN) --release 6 threads
+N =    10  |  total:  31.72ms  |  per step:     6.34µs
+N =    50  |  total: 139.75ms  |  per step:    27.95µs
+N =   100  |  total: 446.22ms  |  per step:    89.24µs
+N =   200  |  total: 678.47ms  |  per step:   135.69µs
+N =   400  |  total:    1.48s  |  per step:   296.17µs
+N =   800  |  total:    2.83s  |  per step:   565.57µs
+N =  1600  |  total:    7.40s  |  per step:     1.48ms
+N =  3200  |  total:   16.90s  |  per step:     3.38ms
+N =  6400  |  total:   38.23s  |  per step:     7.65ms
+N = 12800  |  total:   89.42s  |  per step:    17.88ms
+N = 25600  |  total:  186.87s  |  per step:    37.37ms
+N = 51200  |  total:  441.49s  |  per step:    88.30ms

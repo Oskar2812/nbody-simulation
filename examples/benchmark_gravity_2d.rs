@@ -53,7 +53,7 @@ fn benchmark(num_bodies: usize, num_steps: usize) {
 fn main() {
     let step_count = 5000;
 
-    for &n in &[10, 50, 100, 200, 400, 800, 1600, 3200] {
+    for &n in &[10, 50, 100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200] {
         benchmark(n, step_count);
     }
 }
