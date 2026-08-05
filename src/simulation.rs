@@ -1,12 +1,15 @@
 mod gravity;
 mod quadtree;
+mod threads;
 
 use crate::math::Vec2;
+use crate::simulation::threads::{SimData, ThreadPool};
 use crate::visualise::osk_graphics::Colour;
 
 use std::collections::VecDeque;
 
 pub const G: f64 = 4.0 * std::f64::consts::PI * std::f64::consts::PI;
+const NUM_THREADS: usize = 6;
 
 #[derive(Debug)]
 pub struct Trail {
@@ -24,6 +27,7 @@ pub struct Body {
     pub radius: f64
 }
 
+#[derive(Copy, Clone)]
 pub enum Potential {
     Gravity3d,
     Gravity2d,
@@ -35,6 +39,7 @@ pub struct Simulation {
     pub height: f64,
     pub length: f64,
     pub potential: Potential,
+    thread_pool: ThreadPool
 }
 
 impl Trail {
@@ -70,7 +75,14 @@ impl Body {
 
 impl Simulation {
     pub fn new(height: f64, length: f64, dt: f64, potential: Potential) -> Simulation {
-        Simulation { bodies: Vec::new(), dt, height, length, potential }
+        let thread_pool = ThreadPool::new(NUM_THREADS, SimData {
+            height,
+            length,
+            dt,
+            potential
+        });
+
+        Simulation { bodies: Vec::new(), dt, height, length, potential, thread_pool }
     }
 
     pub fn add_body(&mut self, body: Body) {
