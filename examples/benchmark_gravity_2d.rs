@@ -2,12 +2,14 @@ use nbody_simulation::{Simulation, Body, Vec2, Colour, simulation::Potential};
 use std::time::Instant;
 use std::f64::consts::PI;
 
+const NUM_THREADS: usize = 5;
+
 fn build_random_cluster(num_bodies: usize) -> Simulation {
     let length: f64 = 40.0;
     let height: f64 = 40.0;
     let center = Vec2::new(length / 2.0, height / 2.0);
 
-    let mut sim = Simulation::new(height, length, 0.002, Potential::Gravity2d);
+    let mut sim = Simulation::new(height, length, 0.002, Potential::Gravity2d, NUM_THREADS);
 
     let mut seed: u64 = 12345;
     let mut next_rand = move || -> f64 {

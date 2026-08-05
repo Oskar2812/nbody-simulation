@@ -9,7 +9,6 @@ use crate::visualise::osk_graphics::Colour;
 use std::collections::VecDeque;
 
 pub const G: f64 = 4.0 * std::f64::consts::PI * std::f64::consts::PI;
-const NUM_THREADS: usize = 6;
 
 #[derive(Debug)]
 pub struct Trail {
@@ -74,8 +73,8 @@ impl Body {
 }
 
 impl Simulation {
-    pub fn new(height: f64, length: f64, dt: f64, potential: Potential) -> Simulation {
-        let thread_pool = ThreadPool::new(NUM_THREADS, SimData {
+    pub fn new(height: f64, length: f64, dt: f64, potential: Potential, num_threads: usize) -> Simulation {
+        let thread_pool = ThreadPool::new(num_threads, SimData {
             height,
             length,
             dt,

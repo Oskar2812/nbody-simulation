@@ -1,5 +1,6 @@
 use nbody_simulation::{Body, Colour, Simulation, Vec2, Visualiser, simulation::Potential};
 
+const NUM_THREADS: usize = 5;
 fn main() {
      let length: f64 = 20.0;
     let height: f64 = 20.0;
@@ -28,7 +29,7 @@ fn main() {
         1000,
     );
 
-    let mut sim: Simulation = Simulation::new(height, length, 0.005, Potential::Gravity2d);
+    let mut sim: Simulation = Simulation::new(height, length, 0.005, Potential::Gravity2d, NUM_THREADS);
     sim.add_body(star);
     sim.add_body(orbiter_a);
     sim.add_body(orbiter_b);

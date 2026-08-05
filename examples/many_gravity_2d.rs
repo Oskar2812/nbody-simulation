@@ -3,13 +3,14 @@ use nbody_simulation::{Body, Colour, Simulation, Vec2, Visualiser, simulation::P
 use std::f64::consts::PI;
 
 const NUM_BODIES: usize = 20000;   // crank this up to stress-test compute_forces
+const NUM_THREADS: usize = 5;
 
 fn main() {
     let length: f64 = 40.0;
     let height: f64 = 40.0;
     let center = Vec2::new(length / 2.0, height / 2.0);
 
-    let mut sim: Simulation = Simulation::new(height, length, 0.002, Potential::Gravity2d);
+    let mut sim: Simulation = Simulation::new(height, length, 0.002, Potential::Gravity2d, NUM_THREADS);
 
     // simple deterministic pseudo-random generator so runs are repeatable
     let mut seed: u64 = 12345;
@@ -33,7 +34,7 @@ fn main() {
         let speed = max_initial_speed * next_rand();
         let vel = Vec2::new(speed * vel_angle.cos(), speed * vel_angle.sin());
 
-        let body = Body::new(mass, pos, vel, Colour::CYAN, 0.1, 0);
+        let body = Body::new(mass, pos, vel, Colour::CYAN, 0.05, 0);
         sim.add_body(body);
     }
 
