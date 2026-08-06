@@ -110,6 +110,7 @@ impl Visualiser {
         }
 
         stop_flag.store(true, Ordering::Relaxed);
+        drop(receiver);   // unblock a sim thread parked in sender.send() so it can see stop_flag and return
 
         let sim = sim_handle.join().unwrap();   // reclaim ownership once the sim thread finishes
         self.sim = Some(sim);
