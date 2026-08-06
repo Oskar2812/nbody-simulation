@@ -42,7 +42,7 @@ impl Visualiser {
 
         let mut timestep: usize = 0;
 
-        let (sender, receiver) = mpsc::channel::<FrameData>();
+        let (sender, receiver) = mpsc::sync_channel::<FrameData>(2);
 
         let mut sim = self.sim.take().expect("Simulation missing");
         let sim_height = sim.height;
